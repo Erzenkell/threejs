@@ -1,34 +1,66 @@
 import React from "react";
-import { Grid } from "@react-three/drei";
+import * as THREE from "three";
+
+import { Firepit } from "./objects/Firepit";
+import { Tree } from "./objects/Tree";
+
+export const TREE_COLLIDERS = [
+  { x: -8, z: -8, radius: 2.2 },
+  { x: 0, z: -10, radius: 2.4 },
+  { x: 8, z: -8, radius: 2.2 },
+  { x: -12, z: 0, radius: 2.5 },
+  { x: 12, z: 0, radius: 2.5 },
+  { x: -9, z: 8, radius: 2.3 },
+  { x: 0, z: 10, radius: 2.6 },
+  { x: 9, z: 8, radius: 2.3 },
+  { x: -4, z: -13, radius: 1.9 },
+  { x: 4, z: -13, radius: 1.9 },
+  { x: -14, z: 6, radius: 1.9 },
+  { x: 14, z: 6, radius: 1.9 },
+];
+
+function Trees({ x, z }) {
+  return (
+    <group position={[x, 0, z]}>
+      <Tree position={[0, 0, 0]} scale={0.01} />
+    </group>
+  );
+}
+
+function GroundRing() {
+  const shape = new THREE.Shape();
+  shape.absarc(0, 0, 5.5, 0, Math.PI * 2, false);
+
+  const hole = new THREE.Path();
+  hole.absarc(0, 0, 2.1, 0, Math.PI * 2, true);
+  shape.holes.push(hole);
+
+  return (
+    <mesh rotation-x={-Math.PI / 2} position={[0, 0.01, 0]} receiveShadow>
+      <shapeGeometry args={[shape]} />
+      <meshStandardMaterial color="#6b5f2a" />
+    </mesh>
+  );
+}
 
 export function Level() {
-  const obstacles = [
-    [6, 1, 0],
-    [-6, 1, -8],
-    [10, 1, 10],
-    [-10, 1, 8],
-    [0, 1, -14],
-  ];
-
   return (
     <group>
       <mesh rotation-x={-Math.PI / 2} receiveShadow>
-        <planeGeometry args={[200, 200]} />
-        <meshStandardMaterial color="#1f2937" />
+        <planeGeometry args={[60, 60]} />
+        <meshStandardMaterial color="#10281f" />
       </mesh>
 
-      <Grid
-        args={[200, 200]}
-        cellSize={1}
-        sectionSize={10}
-        infiniteGrid
-      />
+      <mesh rotation-x={-Math.PI / 2} position={[0, 0.005, 0]} receiveShadow>
+        <circleGeometry args={[5.2, 48]} />
+        <meshStandardMaterial color="#314a2a" />
+      </mesh>
 
-      {obstacles.map((p, i) => (
-        <mesh key={i} position={p} castShadow receiveShadow>
-          <boxGeometry args={[2, 2, 2]} />
-          <meshStandardMaterial color="#475569" />
-        </mesh>
+      <GroundRing />
+      <Firepit position={[0, 0, 0]} scale={1} />
+
+      {TREE_COLLIDERS.map((tree, i) => (
+        <Trees key={i} {...tree} />
       ))}
     </group>
   );
