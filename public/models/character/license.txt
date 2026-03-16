@@ -1,0 +1,11 @@
+Model Information:
+* title:	Male Character + Animations
+* source:	https://sketchfab.com/3d-models/male-character-animations-e066cb14c5674a95b67015056a8a98dc
+* author:	William Luque (https://sketchfab.com/luquewilliam230)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Male Character + Animations" (https://sketchfab.com/3d-models/male-character-animations-e066cb14c5674a95b67015056a8a98dc) by William Luque (https://sketchfab.com/luquewilliam230) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
