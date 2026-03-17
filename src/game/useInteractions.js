@@ -2,9 +2,9 @@ import { useEffect, useRef } from "react";
 import * as THREE from "three";
 
 export function useInteractions(playerRef, interactables) {
-  const activeSet = useRef(new Set());
+  const currentTarget = useRef(null);
   const pressedKeys = useRef(new Set());
-  const interactLock = useRef(new Set());
+  const interactLock = useRef(false);
   const temp = useRef(new THREE.Vector3());
 
   useEffect(() => {
@@ -14,7 +14,7 @@ export function useInteractions(playerRef, interactables) {
 
     const onKeyUp = (e) => {
       pressedKeys.current.delete(e.code);
-      interactLock.current.delete(e.code);
+      interactLock.current = false;
     };
 
     window.addEventListener("keydown", onKeyDown);
@@ -30,37 +30,42 @@ export function useInteractions(playerRef, interactables) {
     if (!playerRef.current) return;
 
     const playerPos = playerRef.current.position;
-    const nextActive = new Set();
+
+    let closest = null;
+    let closestDistance = Infinity;
 
     for (const item of interactables) {
       temp.current.set(item.position[0], item.position[1], item.position[2]);
 
       const distance = playerPos.distanceTo(temp.current);
-      const isNear = distance <= item.radius;
 
-      if (isNear) {
-        nextActive.add(item.id);
-
-        if (!activeSet.current.has(item.id)) {
-          item.onEnter?.(item);
-        }
-
-        const key = item.key ?? "KeyE";
-        const keyPressed = pressedKeys.current.has(key);
-        const locked = interactLock.current.has(key);
-
-        if (keyPressed && !locked) {
-          item.onInteract?.(item);
-          interactLock.current.add(key);
-        }
-      } else {
-        if (activeSet.current.has(item.id)) {
-          item.onLeave?.(item);
-        }
+      if (distance <= item.radius && distance < closestDistance) {
+        closest = item;
+        closestDistance = distance;
       }
     }
 
-    activeSet.current = nextActive;
+    if (currentTarget.current?.id !== closest?.id) {
+      if (currentTarget.current) {
+        currentTarget.current.onLeave?.(currentTarget.current);
+      }
+
+      if (closest) {
+        closest.onEnter?.(closest);
+      }
+
+      currentTarget.current = closest;
+    }
+
+    if (closest) {
+      const key = closest.key ?? "KeyE";
+      const keyPressed = pressedKeys.current.has(key);
+
+      if (keyPressed && !interactLock.current) {
+        closest.onInteract?.(closest);
+        interactLock.current = true;
+      }
+    }
   };
 
   return { updateInteractions };
