@@ -3,6 +3,11 @@ import * as THREE from "three";
 
 import { Firepit } from "./objects/Firepit";
 import { Tree } from "./objects/Tree";
+import { Guitar } from "./objects/Guitar";
+
+import { useSound } from "../game/sound";
+import { displayText, hideText } from "../game/displayText";
+
 
 export const TREE_COLLIDERS = [
   { x: -8, z: -8, radius: 2.2 },
@@ -45,6 +50,16 @@ function GroundRing() {
 
 export function Level({ setInteractables }) {
   const [isFireLit, setIsFireLit] = useState(true);
+  const [isPlayingMusic, setIsPlayingMusic] = useState(false);
+  const music = useSound("/audio/Secret of the Forest.mp3", { loop: true });
+
+  useEffect(() => {
+    if (isPlayingMusic) {
+      music.play();
+    } else {
+      music.stop();
+    }
+  }, [isPlayingMusic]);
 
   const interactables = useMemo(() => [
     {
@@ -55,7 +70,28 @@ export function Level({ setInteractables }) {
       onInteract: () => {
         setIsFireLit((prev) => !prev);
       },
+      onEnter: () => {
+        displayText("Press E to light fire", { position: [1, 0, 0] });
+      },
+      onLeave: () => {
+        hideText();
+      },
     },
+    {
+      id: "guitar",
+      position: [-3, 0, -3],
+      radius: 2,
+      key: "KeyE",
+      onInteract: () => {
+        setIsPlayingMusic((prev) => !prev);
+      },
+      onEnter: () => {
+        displayText("Press E to toggle music", { position: [-3, 0, -3] });
+      },
+      onLeave: () => {
+        hideText();
+      }
+    }
   ], []);
 
   useEffect(() => {
@@ -76,6 +112,8 @@ export function Level({ setInteractables }) {
 
       <GroundRing />
       <Firepit position={[0, 0, 0]} scale={0.8} isLit={isFireLit} />
+
+      <Guitar position={[-3, 1, -3]} scale={0.5} />
 
       {TREE_COLLIDERS.map((tree, i) => (
         <Trees key={i} {...tree} />

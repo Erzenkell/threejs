@@ -1,6 +1,8 @@
 import React, { Suspense, useState } from "react";
 import { Level } from "../world/Level";
 import { Player } from "../player/Player";
+import { InteractionUI } from "../ui/InteractionUI";
+
 
 export function Scene() {
   const [interactables, setInteractables] = useState([]);
@@ -26,6 +28,7 @@ export function Scene() {
       <Suspense fallback={null}>
         <Level setInteractables={setInteractables} />
         <Player interactables={interactables} />
+        <InteractionUI />
       </Suspense>
     </>
   );
