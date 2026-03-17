@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState, useMemo, useEffect} from "react";
 import * as THREE from "three";
 
 import { Firepit } from "./objects/Firepit";
@@ -43,7 +43,25 @@ function GroundRing() {
   );
 }
 
-export function Level() {
+export function Level({ setInteractables }) {
+  const [isFireLit, setIsFireLit] = useState(true);
+
+  const interactables = useMemo(() => [
+    {
+      id: "firepit",
+      position: [0, 0, 0],
+      radius: 3,
+      key: "KeyE",
+      onInteract: () => {
+        setIsFireLit((prev) => !prev);
+      },
+    },
+  ], []);
+
+  useEffect(() => {
+    setInteractables(interactables);
+  }, [interactables, setInteractables]);
+
   return (
     <group>
       <mesh rotation-x={-Math.PI / 2} receiveShadow>
@@ -57,7 +75,7 @@ export function Level() {
       </mesh>
 
       <GroundRing />
-      <Firepit position={[0, 0, 0]} scale={1} />
+      <Firepit position={[0, 0, 0]} scale={0.8} isLit={isFireLit} />
 
       {TREE_COLLIDERS.map((tree, i) => (
         <Trees key={i} {...tree} />

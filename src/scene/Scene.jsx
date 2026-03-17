@@ -1,8 +1,10 @@
-import React, { Suspense } from "react";
+import React, { Suspense, useState } from "react";
 import { Level } from "../world/Level";
 import { Player } from "../player/Player";
 
 export function Scene() {
+  const [interactables, setInteractables] = useState([]);
+
   return (
     <>
       <color attach="background" args={["#08110d"]} />
@@ -22,8 +24,8 @@ export function Scene() {
       />
 
       <Suspense fallback={null}>
-        <Level />
-        <Player />
+        <Level setInteractables={setInteractables} />
+        <Player interactables={interactables} />
       </Suspense>
     </>
   );

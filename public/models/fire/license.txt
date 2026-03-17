@@ -1,0 +1,11 @@
+Model Information:
+* title:	Animated stylized fire
+* source:	https://sketchfab.com/3d-models/animated-stylized-fire-c872b1d5a14f456c93d2b275b6c2642e
+* author:	yoba391010576 (https://sketchfab.com/yoba391010576)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Animated stylized fire" (https://sketchfab.com/3d-models/animated-stylized-fire-c872b1d5a14f456c93d2b275b6c2642e) by yoba391010576 (https://sketchfab.com/yoba391010576) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

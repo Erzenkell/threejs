@@ -4,10 +4,9 @@ import { useKeyboardControls } from "@react-three/drei";
 import * as THREE from "three";
 import { CameraController } from "./CameraController";
 import { Character } from "../world/character/Character";
-import { interactables } from "../game/interactables";
 import { useInteractions} from "../game/useInteractions";
 
-export function Player() {
+export function Player({ interactables }) {
   const ref = useRef();
   const velocity = useRef(new THREE.Vector3());
   const direction = useMemo(() => new THREE.Vector3(), []);
@@ -20,7 +19,7 @@ export function Player() {
 
   useEffect(() => {
     if (!ref.current) return;
-    ref.current.position.set(0, 0.9, 0);
+    ref.current.position.set(0, 0, 0);
   }, []);
 
   useFrame((_, delta) => {
@@ -71,7 +70,7 @@ export function Player() {
     <group ref={ref}>
       <Character
         animation={animation}
-        scale={1}
+        scale={0.05}
         rotation={[0, 2 * Math.PI, 0]}
       />
       <CameraController target={ref} />

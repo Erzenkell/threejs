@@ -1,7 +1,9 @@
 import React, { useEffect, useMemo } from "react";
 import { Clone, useGLTF } from "@react-three/drei";
 
-export function Firepit({ position = [0, 0, 0], scale = 1, ...props }) {
+import {Fire} from "./Fire";
+
+export function Firepit({ position = [0, 0, 0], scale = 1, isLit = false, ...props }) {
   const { scene } = useGLTF("/models/firepit/firepit.gltf");
 
   const firepitScene = useMemo(() => scene.clone(true), [scene]);
@@ -16,12 +18,15 @@ export function Firepit({ position = [0, 0, 0], scale = 1, ...props }) {
   }, [firepitScene]);
 
   return (
-    <Clone
-      object={firepitScene}
-      position={position}
-      scale={scale}
-      {...props}
-    />
+    <>
+      <Clone
+        object={firepitScene}
+        position={position}
+        scale={scale}
+        {...props}
+      />
+      {isLit ? <Fire position={[-0.2, 0.4, 0]} scale={10} /> : null}
+    </>
   );
 }
 
