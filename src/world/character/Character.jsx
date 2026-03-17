@@ -1,11 +1,51 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useMemo, useRef } from "react";
 import { useGLTF, useAnimations } from "@react-three/drei";
 import * as THREE from "three";
+
+function trimClip(clip, startTime = 3) {
+  const tracks = clip.tracks
+    .map((track) => {
+      const times = [];
+      const values = [];
+      const valueSize = track.getValueSize();
+
+      for (let i = 0; i < track.times.length; i++) {
+        const t = track.times[i];
+        if (t >= startTime) {
+          times.push(t - startTime);
+          for (let j = 0; j < valueSize; j++) {
+            values.push(track.values[i * valueSize + j]);
+          }
+        }
+      }
+
+      if (times.length === 0) return null;
+
+      return new track.constructor(track.name, times, values, track.getInterpolation());
+    })
+    .filter(Boolean);
+
+  const duration = Math.max(0, clip.duration - startTime);
+  return new THREE.AnimationClip(clip.name, duration, tracks);
+}
 
 export function Character({ animation = "idle", ...props }) {
   const group = useRef();
   const { scene, animations } = useGLTF("/models/character/scene.gltf");
-  const { actions } = useAnimations(animations, group);
+
+  const trimmedAnimations = useMemo(() => {
+    const offsets = {
+      idle: 3,
+      walk: 3.2,
+      run: 4.59,
+    };
+
+    return animations.map((clip) =>
+      trimClip(clip, offsets[clip.name] ?? 0)
+    );
+  }, [animations]);
+
+  const { actions } = useAnimations(trimmedAnimations, group);
 
   useEffect(() => {
     scene.traverse((child) => {
@@ -25,17 +65,17 @@ export function Character({ animation = "idle", ...props }) {
       action.reset();
     });
 
-    const action = actions[animation];
-    action.reset();
-    action.time = 0;
-    action.enabled = true;
-    action.setLoop(THREE.LoopRepeat, Infinity);
-    action.setEffectiveTimeScale(1);
-    action.setEffectiveWeight(1);
-    action.play();
+    actions[animation]
+      .reset()
+      .setLoop(THREE.LoopRepeat, Infinity)
+      .setEffectiveTimeScale(1)
+      .setEffectiveWeight(1)
+      .fadeIn(0.1)
+      .play();
 
     return () => {
-      action.stop();
+      actions[animation]?.fadeOut(0.1);
+      actions[animation]?.stop();
     };
   }, [actions, animation]);
 

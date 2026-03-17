@@ -72,7 +72,7 @@ export function Player() {
         <Character
           animation={animation}
           scale={0.05}
-          rotation={[0, Math.PI, 0]}
+          rotation={[0, 2 * Math.PI, 0]}
         />
       </group>
       <CameraController target={ref} />
