@@ -4,6 +4,8 @@ import * as THREE from "three";
 import { Firepit } from "./objects/Firepit";
 import { Tree } from "./objects/Tree";
 import { Guitar } from "./objects/Guitar";
+import { Ground } from "./objects/Ground";
+import { SnapToGround } from "./SnapToGround";
 
 import { useSound } from "../game/sound";
 import { displayText, hideText } from "../game/displayText";
@@ -29,22 +31,6 @@ function Trees({ x, z }) {
     <group position={[x, 0, z]}>
       <Tree position={[0, 0, 0]} scale={0.01} />
     </group>
-  );
-}
-
-function GroundRing() {
-  const shape = new THREE.Shape();
-  shape.absarc(0, 0, 5.5, 0, Math.PI * 2, false);
-
-  const hole = new THREE.Path();
-  hole.absarc(0, 0, 2.1, 0, Math.PI * 2, true);
-  shape.holes.push(hole);
-
-  return (
-    <mesh rotation-x={-Math.PI / 2} position={[0, 0.01, 0]} receiveShadow>
-      <shapeGeometry args={[shape]} />
-      <meshStandardMaterial color="#6b5f2a" />
-    </mesh>
   );
 }
 
@@ -100,24 +86,17 @@ export function Level({ setInteractables }) {
 
   return (
     <group>
-      <mesh rotation-x={-Math.PI / 2} receiveShadow>
-        <planeGeometry args={[60, 60]} />
-        <meshStandardMaterial color="#10281f" />
-      </mesh>
+      <Ground />
+      <fog attach="fog" args={["#111827", 20, 80]} />
+      <SnapToGround >
+        <Firepit position={[0, 0, 0]} scale={0.8} isLit={isFireLit} />
 
-      <mesh rotation-x={-Math.PI / 2} position={[0, 0.005, 0]} receiveShadow>
-        <circleGeometry args={[5.2, 48]} />
-        <meshStandardMaterial color="#314a2a" />
-      </mesh>
+        <Guitar position={[-3, 1, -3]} scale={0.5} />
 
-      <GroundRing />
-      <Firepit position={[0, 0, 0]} scale={0.8} isLit={isFireLit} />
-
-      <Guitar position={[-3, 1, -3]} scale={0.5} />
-
-      {TREE_COLLIDERS.map((tree, i) => (
-        <Trees key={i} {...tree} />
-      ))}
+        {TREE_COLLIDERS.map((tree, i) => (
+          <Trees key={i} {...tree} />
+        ))}
+      </SnapToGround>
     </group>
   );
 }

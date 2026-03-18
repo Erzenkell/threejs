@@ -6,6 +6,7 @@ import { CameraController } from "./CameraController";
 import { Character } from "../world/character/Character";
 import { useInteractions} from "../game/useInteractions";
 import { useOcclusionFade } from "../game/useOcclusionFade";
+import { useGrounding } from "../game/useGrounding";
 
 export function Player({ interactables }) {
   const ref = useRef();
@@ -19,6 +20,13 @@ export function Player({ interactables }) {
   const { updateInteractions } = useInteractions(ref, interactables);
 
   useOcclusionFade(ref);
+
+  useGrounding(ref, {
+    hoverHeight: 0,
+    rayStartHeight: 8,
+    maxDrop: 20,
+    smooth: 18,
+  });
 
   useEffect(() => {
     if (!ref.current) return;

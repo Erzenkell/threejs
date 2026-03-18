@@ -8,7 +8,7 @@ export function Tree({ position = [0, 0, 0], scale = 0.01, ...props }) {
   useEffect(() => {
     treeScene.traverse((child) => {
     if (child.isMesh) {
-        child.material = child.material.clone(); // 🔥 important
+        child.material = child.material.clone();
         child.userData.fadeable = true;
       }
     });
