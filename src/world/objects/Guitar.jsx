@@ -20,7 +20,9 @@ export function Guitar({ position = [0, 0, 0], scale = 0.01, ...props }) {
       position={position}
       scale={scale}
       {...props}
-    />
+    >
+      <mesh userData={{ fadeable: true }}></mesh>
+    </Clone>
   );
 }
 

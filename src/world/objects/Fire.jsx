@@ -30,7 +30,9 @@ export function Fire({ position = [0, 0, 0], scale = 1, ...props }) {
       position={position}
       scale={scale}
       {...props}
-    />
+    >
+      <mesh userData={{ fadeable: true }}></mesh>
+    </Clone>
   );
 }
 

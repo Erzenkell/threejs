@@ -5,6 +5,7 @@ import * as THREE from "three";
 import { CameraController } from "./CameraController";
 import { Character } from "../world/character/Character";
 import { useInteractions} from "../game/useInteractions";
+import { useOcclusionFade } from "../game/useOcclusionFade";
 
 export function Player({ interactables }) {
   const ref = useRef();
@@ -16,6 +17,8 @@ export function Player({ interactables }) {
   const [animation, setAnimation] = useState("idle");
 
   const { updateInteractions } = useInteractions(ref, interactables);
+
+  useOcclusionFade(ref);
 
   useEffect(() => {
     if (!ref.current) return;

@@ -24,7 +24,9 @@ export function Firepit({ position = [0, 0, 0], scale = 1, isLit = false, ...pro
         position={position}
         scale={scale}
         {...props}
-      />
+      >
+        <mesh userData={{ fadeable: true }}></mesh>
+      </Clone>
       {isLit ? <Fire position={[-0.2, 0.4, 0]} scale={10} /> : null}
     </>
   );
