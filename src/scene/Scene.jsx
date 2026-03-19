@@ -10,7 +10,7 @@ export function Scene() {
   return (
     <>
       <color attach="background" args={["#08110d"]} />
-
+      <fog attach="fog" args={["#111827", 20, 80]} />
       <hemisphereLight
         intensity={0.55}
         groundColor="#06110a"

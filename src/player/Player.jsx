@@ -62,12 +62,10 @@ export function Player({ interactables }) {
     ref.current.position.z += velocity.current.z * delta;
 
     if (direction.lengthSq() > 0.0001) {
-      const angle = Math.atan2(direction.x, direction.z);
-      ref.current.rotation.y = THREE.MathUtils.lerp(
-        ref.current.rotation.y,
-        angle,
-        1 - Math.exp(-delta * 12)
-      );
+      const targetAngle = Math.atan2(direction.x, direction.z);
+      let angleDiff = targetAngle - ref.current.rotation.y;
+      angleDiff = Math.atan2(Math.sin(angleDiff), Math.cos(angleDiff));
+      ref.current.rotation.y += angleDiff * (1 - Math.exp(-delta * 12));
     }
 
     const moving = direction.lengthSq() > 0.0001;

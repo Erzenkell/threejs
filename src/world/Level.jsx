@@ -87,7 +87,6 @@ export function Level({ setInteractables }) {
   return (
     <group>
       <Ground />
-      <fog attach="fog" args={["#111827", 20, 80]} />
       <SnapToGround >
         <Firepit position={[0, 0, 0]} scale={0.8} isLit={isFireLit} />
 
